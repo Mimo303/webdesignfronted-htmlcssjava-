@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Butterfly Free Spirit</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #87CEEB, #98FB98); /* Sky to grass gradient */
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        #central-text {
+            text-align: center;
+            z-index: 10;
+            /* Base color: Indigo, but we'll dynamically adjust via JS to suit butterfly colors */
+            color: #4B0082;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transition: color 1s ease; /* Smooth color changes */
+        }
+
+        #central-text h1 {
+            font-size: 4em;
+            margin: 0;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        #central-text p {
+            font-size: 1.5em;
+            margin: 10px 0 0 0;
+            font-style: italic;
+            transition: color 1s ease; /* Sync with h1 */
+        }
+
+        .butterfly {
+            position: absolute;
+            font-size: 2em; /* Base, overridden by JS */
+            animation: fly 8s linear infinite, flap 0.6s ease-in-out infinite; /* Combine fly and flap */
+            pointer-events: none; /* Prevent interaction */
+            z-index: 1;
+            opacity: 0;
+            /* Flap animation for wing movement */
+        }
+
+        /* Flap keyframes: Simulates wing flapping by slight rotation and scale variation */
+        @keyframes flap {
+            0%, 100% {
+                transform: rotate(0deg) scale(1) scaleY(1);
+            }
+            25% {
+                transform: rotate(2deg) scale(1.05) scaleY(1.1);
+            }
+            50% {
+                transform: rotate(-1deg) scale(0.95) scaleY(0.9);
+            }
+            75% {
+                transform: rotate(1deg) scale(1.02) scaleY(1.05);
+            }
+        }
+
+        /* Base fly animation - will be overridden by direction classes */
+        @keyframes fly {
+            0% {
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* Left to Right */
+        .dir-ltr {
+            left: -5%;
+            top: 0;
+            animation: fly-ltr 8s linear infinite, flap 0.6s ease-in-out infinite;
+        }
+        @keyframes fly-ltr {
+            0% {
+                transform: translateX(0) translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(110%) translateY(var(--dy, 0px)) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Right to Left */
+        .dir-rtl {
+            right: -5%;
+            top: 0;
+            animation: fly-rtl 8s linear infinite, flap 0.6s ease-in-out infinite;
+        }
+        @keyframes fly-rtl {
+            0% {
+                transform: translateX(0) translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-110%) translateY(var(--dy, 0px)) rotate(-360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Top to Bottom */
+        .dir-ttb {
+            top: -5%;
+            left: 0;
+            animation: fly-ttb 8s linear infinite, flap 0.6s ease-in-out infinite;
+        }
+        @keyframes fly-ttb {
+            0% {
+                transform: translateX(0) translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(var(--dx, 0px)) translateY(110%) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Bottom to Top */
+        .dir-btt {
+            bottom: -5%;
+            left: 0;
+            animation: fly-btt 8s linear infinite, flap 0.6s ease-in-out infinite;
+        }
+        @keyframes fly-btt {
+            0% {
+                transform: translateX(0) translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(var(--dx, 0px)) translateY(-110%) rotate(-360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Diagonal variations for more spread */
+        .dir-ltr-diag-up {
+            left: -5%;
+            bottom: 100%;
+            animation: fly-ltr-diag-up 8s linear infinite, flap 0.6s ease-in-out infinite;
+        }
+        @keyframes fly-ltr-diag-up {
+            0% {
+                transform: translateX(0) translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(110%) translateY(-50%) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .dir-ltr-diag-down {
+            left: -5%;
+            top: 100%;
+            animation: fly-ltr-diag-down 8s linear infinite, flap 0.6s ease-in-out infinite;
+        }
+        @keyframes fly-ltr-diag-down {
+            0% {
+                transform: translateX(0) translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(110%) translateY(50%) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="central-text">
+        <h1>butterfly</h1>
+        <p>I am a free spirit</p>
+    </div>
+
+    <script>
+        const colors = ['#FF69B4', '#9370DB', '#00CED1', '#FFD700', '#FF4500', '#32CD32', '#DA70D6', '#20B2AA', '#FF1493', '#00FF7F', '#FF6347', '#7FFF00']; // Expanded vibrant colors
+        const directions = ['dir-ltr', 'dir-rtl', 'dir-ttb', 'dir-btt', 'dir-ltr-diag-up', 'dir-ltr-diag-down'];
+        const numButterflies = 100;
+        const butterflies = [];
+
+        // Function to get a contrasting color for text based on butterfly color (simple luminance check)
+        function getContrastingColor(bgColor) {
+            // Parse hex to RGB
+            const r = parseInt(bgColor.slice(1, 3), 16);
+            const g = parseInt(bgColor.slice(3, 5), 16);
+            const b = parseInt(bgColor.slice(5, 7), 16);
+            // Calculate luminance
+            const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+            // Return dark or light color
+            return luminance > 0.5 ? '#333333' : '#FFFFFF'; // Dark text on light bg, white on dark
+        }
+
+        function getRandomDirection() {
+            return directions[Math.floor(Math.random() * directions.length)];
+        }
+
+        function getRandomVerticalOffset() {
+            return (Math.random() - 0.5) * 100 + 'vh';
+        }
+
+        function createButterfly() {
+            const butterfly = document.createElement('div');
+            butterfly.className = 'butterfly ' + getRandomDirection();
+            butterfly.innerHTML = '🦋'; // Butterfly emoji
+
+            // Wider size variation: some small (0.5-1.5em), some medium (1.5-3em), some big (3-6em)
+            let size;
+            const sizeCategory = Math.random();
+            if (sizeCategory < 0.3) {
+                size = Math.random() * 1 + 0.5; // Small: 0.5-1.5em
+            } else if (sizeCategory < 0.7) {
+                size = Math.random() * 1.5 + 1.5; // Medium: 1.5-3em
+            } else {
+                size = Math.random() * 3 + 3; // Big: 3-6em
+            }
+            butterfly.style.fontSize = size + 'em';
+
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            butterfly.style.color = color;
+
+            // For horizontal directions, add random vertical drift
+            if (butterfly.classList.contains('dir-ltr') || butterfly.classList.contains('dir-rtl')) {
+                butterfly.style.setProperty('--dy', getRandomVerticalOffset());
+                butterfly.style.top = Math.random() * 100 + '%';
+            }
+
+            // For vertical directions, add random horizontal drift
+            if (butterfly.classList.contains('dir-ttb') || butterfly.classList.contains('dir-btt')) {
+                const dx = (Math.random() - 0.5) * 200 + 'vw';
+                butterfly.style.setProperty('--dx', dx);
+                butterfly.style.left = Math.random() * 100 + '%';
+            }
+
+            // For diagonals, set initial positions accordingly
+            if (butterfly.classList.contains('dir-ltr-diag-up')) {
+                butterfly.style.top = '100%';
+            } else if (butterfly.classList.contains('dir-ltr-diag-down')) {
+                butterfly.style.top = '0%';
+                butterfly.style.bottom = 'auto';
+            }
+
+            // Random scale for variety (applied on top of size)
+            const scale = Math.random() * 0.4 + 0.8; // 0.8-1.2
+            // Note: Flap animation will handle additional transforms; base scale here
+            butterfly.style.setProperty('--base-scale', scale);
+
+            // Random animation duration and delay
+            const duration = Math.random() * 5 + 5; // 5-10s
+            const flapSpeed = Math.random() * 0.3 + 0.4; // Vary flap speed 0.4-0.7s for realism
+            butterfly.style.animationDuration = duration + 's, ' + flapSpeed + 's'; // Fly duration, flap duration
+            butterfly.style.animationDelay = Math.random() * 3 + 's';
+
+            document.body.appendChild(butterfly);
+            butterflies.push({ element: butterfly, duration, color });
+
+            // Update central text color periodically based on nearby/dominant butterfly colors
+            updateTextColor();
+
+            // Remove after animation completes + buffer
+            setTimeout(() => {
+                if (butterfly.parentNode) {
+                    butterfly.parentNode.removeChild(butterfly);
+                    const index = butterflies.findIndex(b => b.element === butterfly);
+                    if (index > -1) butterflies.splice(index, 1);
+                    // Re-update text color on removal
+                    updateTextColor();
+                }
+            }, (duration + 3) * 1000);
+        }
+
+        function updateTextColor() {
+            if (butterflies.length === 0) return;
+            // Pick a random recent butterfly color and get contrasting text color
+            const recentButterfly = butterflies[Math.floor(Math.random() * Math.min(10, butterflies.length))]; // From last 10 or so
+            const contrasting = getContrastingColor(recentButterfly.color);
+            const centralText = document.getElementById('central-text');
+            centralText.style.color = contrasting;
+            const p = centralText.querySelector('p');
+            p.style.color = contrasting; // Sync quote color
+        }
+
+        // Initial text color setup
+        updateTextColor();
+
+        // Create initial wave of butterflies from all directions
+        for (let i = 0; i < numButterflies; i++) {
+            setTimeout(createButterfly, i * 100);
+        }
+
+        // Continuously spawn new ones to keep the screen full
+        setInterval(() => {
+            if (butterflies.length < 150) {
+                createButterfly();
+            }
+        }, 800);
+
+        // Periodically update text color every 3 seconds to reflect changing butterflies
+        setInterval(updateTextColor, 3000);
+    </script>
+</body>
+</html>
