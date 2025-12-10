@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cute Mensuration Calculator</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e, #fecfef, #a8edea, #fed6e3);
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #ff6b9d;
+            margin-bottom: 20px;
+        }
+        select, input, button {
+            border-radius: 15px;
+            border: 2px solid #ff6b9d;
+            padding: 10px;
+            margin: 10px;
+            font-size: 1em;
+            outline: none;
+        }
+        select {
+            background: #fff;
+        }
+        input {
+            width: 200px;
+        }
+        button {
+            background: #ff6b9d;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #e55a8a;
+        }
+        .inputs {
+            display: none;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+        .cute-face {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="cute-face">😊</div>
+        <h1>Cute Chubby Mensuration Calculator</h1>
+        <p>Select a shape and enter the dimensions to calculate area, perimeter, volume, or surface area!</p>
+        <select id="shapeSelect">
+            <option value="">Choose a shape...</option>
+            <option value="triangle">Triangle</option>
+            <option value="square">Square</option>
+            <option value="rectangle">Rectangle</option>
+            <option value="parallelogram">Parallelogram</option>
+            <option value="circle">Circle</option>
+            <option value="trapezium">Trapezium</option>
+            <option value="rhombus">Rhombus</option>
+            <option value="kite">Kite</option>
+            <option value="cube">Cube</option>
+            <option value="cuboid">Cuboid</option>
+            <option value="cylinder">Cylinder</option>
+            <option value="cone">Cone</option>
+            <option value="sphere">Sphere</option>
+        </select>
+        
+        <div id="triangle" class="inputs">
+            <input type="number" id="triBase" placeholder="Base" step="0.01">
+            <input type="number" id="triHeight" placeholder="Height" step="0.01">
+            <input type="number" id="triSide1" placeholder="Side 1" step="0.01">
+            <input type="number" id="triSide2" placeholder="Side 2" step="0.01">
+            <input type="number" id="triSide3" placeholder="Side 3" step="0.01">
+            <button onclick="calculate('triangle')">Calculate</button>
+        </div>
+        
+        <div id="square" class="inputs">
+            <input type="number" id="sqSide" placeholder="Side" step="0.01">
+            <button onclick="calculate('square')">Calculate</button>
+        </div>
+        
+        <div id="rectangle" class="inputs">
+            <input type="number" id="rectLength" placeholder="Length" step="0.01">
+            <input type="number" id="rectWidth" placeholder="Width" step="0.01">
+            <button onclick="calculate('rectangle')">Calculate</button>
+        </div>
+        
+        <div id="parallelogram" class="inputs">
+            <input type="number" id="paraBase" placeholder="Base" step="0.01">
+            <input type="number" id="paraHeight" placeholder="Height" step="0.01">
+            <input type="number" id="paraSide" placeholder="Adjacent Side" step="0.01">
+            <button onclick="calculate('parallelogram')">Calculate</button>
+        </div>
+        
+        <div id="circle" class="inputs">
+            <input type="number" id="circRadius" placeholder="Radius" step="0.01">
+            <button onclick="calculate('circle')">Calculate</button>
+        </div>
+        
+        <div id="trapezium" class="inputs">
+            <input type="number" id="trapA" placeholder="Parallel Side A" step="0.01">
+            <input type="number" id="trapB" placeholder="Parallel Side B" step="0.01">
+            <input type="number" id="trapH" placeholder="Height" step="0.01">
+            <input type="number" id="trapC" placeholder="Non-parallel Side C" step="0.01">
+            <input type="number" id="trapD" placeholder="Non-parallel Side D" step="0.01">
+            <button onclick="calculate('trapezium')">Calculate</button>
+        </div>
+        
+        <div id="rhombus" class="inputs">
+            <input type="number" id="rhomD1" placeholder="Diagonal 1" step="0.01">
+            <input type="number" id="rhomD2" placeholder="Diagonal 2" step="0.01">
+            <input type="number" id="rhomSide" placeholder="Side" step="0.01">
+            <button onclick="calculate('rhombus')">Calculate</button>
+        </div>
+        
+        <div id="kite" class="inputs">
+            <input type="number" id="kiteD1" placeholder="Diagonal 1" step="0.01">
+            <input type="number" id="kiteD2" placeholder="Diagonal 2" step="0.01">
+            <input type="number" id="kiteS1" placeholder="Side 1" step="0.01">
+            <input type="number" id="kiteS2" placeholder="Side 2" step="0.01">
+            <button onclick="calculate('kite')">Calculate</button>
+        </div>
+        
+        <div id="cube" class="inputs">
+            <input type="number" id="cubeSide" placeholder="Side" step="0.01">
+            <button onclick="calculate('cube')">Calculate</button>
+        </div>
+        
+        <div id="cuboid" class="inputs">
+            <input type="number" id="cubLength" placeholder="Length" step="0.01">
+            <input type="number" id="cubWidth" placeholder="Width" step="0.01">
+            <input type="number" id="cubHeight" placeholder="Height" step="0.01">
+            <button onclick="calculate('cuboid')">Calculate</button>
+        </div>
+        
+        <div id="cylinder" class="inputs">
+            <input type="number" id="cylRadius" placeholder="Radius" step="0.01">
+            <input type="number" id="cylHeight" placeholder="Height" step="0.01">
+            <button onclick="calculate('cylinder')">Calculate</button>
+        </div>
+        
+        <div id="cone" class="inputs">
+            <input type="number" id="coneRadius" placeholder="Radius" step="0.01">
+            <input type="number" id="coneHeight" placeholder="Height" step="0.01">
+            <button onclick="calculate('cone')">Calculate</button>
+        </div>
+        
+        <div id="sphere" class="inputs">
+            <input type="number" id="sphRadius" placeholder="Radius" step="0.01">
+            <button onclick="calculate('sphere')">Calculate</button>
+        </div>
+        
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        const shapeSelect = document.getElementById('shapeSelect');
+        const inputs = document.querySelectorAll('.inputs');
+        const resultDiv = document.getElementById('result');
+
+        shapeSelect.addEventListener('change', function() {
+            inputs.forEach(input => input.style.display = 'none');
+            const selected = this.value;
+            if (selected) {
+                document.getElementById(selected).style.display = 'block';
+                resultDiv.innerHTML = '';
+            }
+        });
+
+        function calculate(shape) {
+            let result = '';
+            const PI = Math.PI;
+            switch (shape) {
+                case 'triangle':
+                    const base = parseFloat(document.getElementById('triBase').value);
+                    const height = parseFloat(document.getElementById('triHeight').value);
+                    const s1 = parseFloat(document.getElementById('triSide1').value);
+                    const s2 = parseFloat(document.getElementById('triSide2').value);
+                    const s3 = parseFloat(document.getElementById('triSide3').value);
+                    if (base && height && s1 && s2 && s3) {
+                        const area = 0.5 * base * height;
+                        const perimeter = s1 + s2 + s3;
+                        result = `Area: ${area.toFixed(2)}<br>Perimeter: ${perimeter.toFixed(2)}`;
+                    } else {
+                        result = 'Please enter all values!';
+                    }
+                    break;
+                case 'square':
+                    const side = parseFloat(document.getElementById('sqSide').value);
+                    if (side) {
+                        const area = side * side;
+                        const perimeter = 4 * side;
+                        result = `Area: ${area.toFixed(2)}<br>Perimeter: ${perimeter.toFixed(2)}`;
+                    } else {
+                        result = 'Please enter the side!';
+                    }
+                    break;
+                case 'rectangle':
+                    const length = parseFloat(document.getElementById('rectLength').value);
+                    const width = parseFloat(document.getElementById('rectWidth').value);
+                    if (length && width) {
+                        const area = length * width;
+                        const perimeter = 2 * (length + width);
+                        result = `Area: ${area.toFixed(2)}<br>Perimeter: ${perimeter.toFixed(2)}`;
+                    } else {
+                        result = 'Please enter length and width!';
+                    }
+                    break;
+                case 'parallelogram':
+                    const pBase = parseFloat(document.getElementById('paraBase').value);
+                    const pHeight = parseFloat(document.getElementById('paraHeight').value);
+                    const pSide = parseFloat(document.getElementById('paraSide').value);
+                    if (pBase && pHeight && pSide) {
+                        const area = pBase * pHeight;
+                        const perimeter = 2 * (pBase + pSide);
+                        result = `Area: ${area.toFixed(2)}<br>Perimeter: ${perimeter.toFixed(2)}`;
+                    } else {
+                        result = 'Please enter all values!';
+                    }
+                    break;
+                case 'circle':
+                    const radius = parseFloat(document.getElementById('circRadius').value);
+                    if (radius) {
+                        const area = PI * radius * radius;
+                        const circumference = 2 * PI * radius;
+                        result = `Area: ${area.toFixed(2)}<br>Circumference: ${circumference.toFixed(2)}`;
+                    } else {
+                        result = 'Please enter the radius!';
+                    }
+                    break;
+                case 'trapezium':
+                    const a = parseFloat(document.getElementById('trapA').value);
+                    const b = parseFloat(document.getElementById('trapB').value);
+                    const h = parseFloat(document.getElementById('trapH').value);
+                    const c = parseFloat(document.getElementById('trapC').value);
+                    const d = parseFloat(document.getElementById('trapD').value);
+                    if (a && b && h && c && d) {
+                        const area = 0.5 * (a + b) * h;
+                        const perimeter = a + b + c + d;
+                        result = `Area: ${area.toFixed(2)}<br>Perimeter: ${perimeter.toFixed(2)}`;
+                    } else {
+                        result = 'Please enter all values!';
+                    }
+                    break;
+                case 'rhombus':
+                    const d1 = parseFloat(document.getElementById('rhomD1').value);
+                    const d2 = parseFloat(document.getElementById('rhomD2').value);
+                    const rSide = parseFloat(document.getElementById('rhomSide').value);
+                    if (d1 && d2 && rSide) {
+                        const area = 0.5 * d1 * d2;
+                        const perimeter = 4 * rSide;
+                        result = `Area: ${area.toFixed(2)}<br>Perimeter: ${perimeter.toFixed(2)}`;
+                    } else {
+                        result = 'Please enter all values!';
+                    }
+                    break;
+                case 'kite':
+                    const kd1 = parseFloat(document.getElementById('kiteD1').value);
+                    const kd2 = parseFloat(document.getElementById('kiteD2').value);
+                    const ks1 = parseFloat(document.getElementById('kiteS1').value);
+                    const ks2 = parseFloat(document.getElementById('kiteS2').value);
+                    if (kd1 && kd2 && ks1 && ks2) {
+                        const area = 0.5 * kd1 * kd2;
+                        const perimeter = 2 * (ks1 + ks2);
+                        result = `Area: ${area.toFixed(2)}<br>Perimeter: ${perimeter.toFixed(2)}`;
+                    } else {
+                        result = 'Please enter all values!';
+                    }
+                    break;
+                case 'cube':
+                    const cSide = parseFloat(document.getElementById('cubeSide').value);
+                    if (cSide) {
+                        const volume = cSide * cSide * cSide;
+                        const surfaceArea = 6 * cSide * cSide;
+                        result = `Volume: ${volume.toFixed(2)}<br>Surface Area: ${surfaceArea.toFixed(2)}`;
+                    } else {
+                        result = 'Please enter the side!';
+                    }
+                    break;
+                case 'cuboid':
+                    const cLength = parseFloat(document.getElementById('cubLength').value);
+                    const cWidth = parseFloat(document.getElementById('cubWidth').value);
+                    const cHeight = parseFloat(document.getElementById('cubHeight').value);
+                    if (cLength && cWidth && cHeight) {
+                        const volume = cLength * cWidth * cHeight;
+                        const surfaceArea = 2 * (cLength * cWidth + cWidth * cHeight + cHeight * cLength);
+                        result = `Volume: ${volume.toFixed(2)}<br>Surface Area: ${surfaceArea.toFixed(2)}`;
+                    } else {
+                        result = 'Please enter all dimensions!';
+                    }
+                    break;
+                case 'cylinder':
+                    const cylRadius = parseFloat(document.getElementById('cylRadius').value);
+                    const cylHeight = parseFloat(document.getElementById('cylHeight').value);
+                    if (cylRadius && cylHeight) {
+                        const volume = PI * cylRadius * cylRadius * cylHeight;
+                        const surfaceArea = 2 * PI * cylRadius * (cylRadius + cylHeight);
+                        result = `Volume: ${volume.toFixed(2)}<br>Surface Area: ${surfaceArea.toFixed(2)}`;
+                    } else {
+                        result = 'Please enter radius and height!';
+                    }
+                    break;
+                case 'cone':
+                    const coneRadius = parseFloat(document.getElementById('coneRadius').value);
+                    const coneHeight = parseFloat(document.getElementById('coneHeight').value);
+                    if (coneRadius && coneHeight) {
+                        const slantHeight = Math.sqrt(coneRadius * coneRadius + coneHeight * coneHeight);
+                        const volume = (1 / 3) * PI * coneRadius * coneRadius * coneHeight;
+                        const surfaceArea = PI * coneRadius * (coneRadius + slantHeight);
+                        result = `Volume: ${volume.toFixed(2)}<br>Surface Area: ${surfaceArea.toFixed(2)}`;
+                    } else {
+                        result = 'Please enter radius and height!';
+                    }
+                    break;
+                case 'sphere':
+                    const sphRadius = parseFloat(document.getElementById('sphRadius').value);
+                    if (sphRadius) {
+                        const volume = (4 / 3) * PI * sphRadius * sphRadius * sphRadius;
+                        const surfaceArea = 4 * PI * sphRadius * sphRadius;
+                        result = `Volume: ${volume.toFixed(2)}<br>Surface Area: ${surfaceArea.toFixed(2)}`;
+                    } else {
+                        result = 'Please enter the radius!';
+                    }
+                    break;
+            }
+            resultDiv.innerHTML = result;
+        }
+    </script>
+</body>
+</html>
